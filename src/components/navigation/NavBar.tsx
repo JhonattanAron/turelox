@@ -32,7 +32,7 @@ export default function NavBar() {
             </a>
           </li>
           <li>
-            <a href="/home">
+            <a href="/login">
               <UserCircleIcon className="h-6 w-6 text-white" />
             </a>
           </li>

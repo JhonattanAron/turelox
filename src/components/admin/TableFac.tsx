@@ -26,6 +26,12 @@ export default function TableFac() {
                   >
                     status
                   </th>
+                  <th
+                    scope="col"
+                    className="px-5 py-3 text-sm font-normal text-left text-gray-800 uppercase bg-white border-b border-gray-200"
+                  >
+                    Comprobante
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -53,6 +59,14 @@ export default function TableFac() {
                       ></span>
                       <span className="relative">Pendiente</span>
                     </span>
+                  </td>
+                  <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                    <button
+                      type="button"
+                      className=" mx-auto flex justify-center items-center  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  w-12 h-12 rounded-lg "
+                    >
+                      Ver
+                    </button>
                   </td>
                 </tr>
               </tbody>

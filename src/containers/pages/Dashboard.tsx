@@ -10,6 +10,7 @@ import Paid from "../../components/admin/paid";
 import TablePaid from "../../components/admin/TablePaid";
 import ButtonsAdd from "../../components/admin/ButtonsAdd";
 import Form from "../../components/forms/Form";
+import FiltroPorFecha from "../../components/searchs/FiltroPorFecha";
 
 export default function Dashboard() {
   const [value, setValue] = useState("1"); // Cambiado a cadena
@@ -37,6 +38,7 @@ export default function Dashboard() {
       </div>
       <div className="w-full">
         <ButtonsAdd />
+        <FiltroPorFecha />
         <TabContext value={value}>
           <Box>
             <TabList onChange={handleChange} centered>
