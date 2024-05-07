@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { ConfirmDataSet } from "../../redux/reducers/ConfirmData";
-import { CircleStackIcon, CubeIcon } from "@heroicons/react/24/outline";
+import { CircleStackIcon } from "@heroicons/react/24/outline";
 
 interface Params {
   data: {
