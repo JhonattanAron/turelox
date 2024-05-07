@@ -9,7 +9,7 @@ interface Props {
 
 export default function Paid(props: Props) {
   return (
-    <div className="p-4 bg-white shadow-2xl m-5 rounded-2xl w-36 ">
+    <div className="p-4 bg-white shadow-2xl m-5 rounded-2xl w-36">
       <div className="flex items-center">
         <span className={`relative w-4 h-4 p-2 bg-green-500 rounded-full`}>
           <svg
@@ -31,7 +31,8 @@ export default function Paid(props: Props) {
         </p>
         <div className="relative h-2 bg-gray-200 rounded w-28">
           <div
-            className={`absolute top-0 left-0 h-2 w-[75%] bg-green-500 rounded`}
+            style={{ width: `${props.data.porcent}%` }}
+            className={`absolute top-0 left-0 h-2  bg-green-500 rounded`}
           ></div>
         </div>
       </div>
