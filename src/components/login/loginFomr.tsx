@@ -13,10 +13,12 @@ export default function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [incorrectPass, setIncorrectPass] = useState(false);
+  const [noRegister, setNoRegister] = useState(false);
   const [FormData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [ErrorLogin, setErrorLogin] = useState(false);
 
   const HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...FormData, [e.target.name]: e.target.value });
@@ -25,23 +27,30 @@ export default function LoginForm() {
   const HandleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(JSON.stringify(FormData));
-    const GetLogin = await fetch("http://localhost:8085/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-      body: JSON.stringify(FormData),
-    });
-    const json = await GetLogin.json();
-    const value = parseInt(json.response);
-    if (value === 0) {
-      setIncorrectPass(true);
-      return null;
-    } else {
-      dispatch(Login());
-      Cookies.set("id", json.response);
-      navigate("/home");
+    try {
+      const GetLogin = await fetch("http://localhost:8085/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: JSON.stringify(FormData),
+      });
+      const json = await GetLogin.json();
+      const value = parseInt(json.response);
+      if (value === 0) {
+        setIncorrectPass(true);
+        return null;
+      } else if (value === 404) {
+        setNoRegister(true);
+      } else {
+        dispatch(Login());
+        Cookies.set("id", json.response);
+        navigate("/home");
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorLogin(true);
     }
   };
 
@@ -67,6 +76,14 @@ export default function LoginForm() {
                   placeholder="Email"
                 />
               </div>
+              {noRegister ? (
+                <div className="mt-2 text-red-500 flex">
+                  <ExclamationCircleIcon className="w-5 mr-1" /> Usuario No
+                  Registrado
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             <div className="flex flex-col pt-4 mb-12">
               <div className="flex relative ">
@@ -99,6 +116,17 @@ export default function LoginForm() {
             >
               <span className="w-full">Login</span>
             </button>
+            {ErrorLogin ? (
+              <div className="mt-2 text-red-500 flex">
+                <ExclamationCircleIcon className="w-5 mr-1" /> Error con el
+                Servidor Reporta{" "}
+                <a className="ml-1 font-bold underline" href="/">
+                  AQUI
+                </a>
+              </div>
+            ) : (
+              <></>
+            )}
           </form>
           <div className="pt-12 pb-12 text-center">
             <p>

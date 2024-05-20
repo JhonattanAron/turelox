@@ -2,7 +2,10 @@ import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { ConfirmDataSet } from "../../redux/reducers/ConfirmData";
-import { CircleStackIcon } from "@heroicons/react/24/outline";
+import {
+  CircleStackIcon,
+  ExclamationCircleIcon,
+} from "@heroicons/react/24/outline";
 
 interface Params {
   data: {
@@ -18,32 +21,52 @@ export default function Form(params: Params) {
   const [formData, setFormData] = useState({
     empresa: "",
     fecha: "",
-    total: 0,
-    tipo: "",
+    total: "0",
+    tipo: params.data.type ? "factura" : "pago",
+    estado_factura: "0",
     comprobante: "",
   });
+  const [factExists, setFactExists] = useState(false);
   const dispatch = useDispatch();
 
   const HandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
+  const HandleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitFacture = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
-    const fetchPost = await fetch(`http://localhost:8085/fatures/set/${id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-      body: JSON.stringify(formData),
-    });
-    const data = await fetchPost.json();
-    console.log(data.response);
-
-    setResponse(data.response);
-    setSubmit(true);
-    dispatch(ConfirmDataSet());
+    console.log(formData);
+    try {
+      const fetchPost = await fetch(`http://localhost:8085/fatures/set/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: JSON.stringify(formData),
+      });
+      const data = await fetchPost.json();
+      console.log(data.response);
+      if (parseInt(data.response) === 150) {
+        setFactExists(true);
+      } else {
+        setResponse(data.response);
+        setSubmit(true);
+        dispatch(ConfirmDataSet());
+      }
+    } catch (error) {
+      console.log(error);
+      setResponse("Ocurrio un Error con el Servidor");
+    }
+  };
+  const handleSubmitPaid = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log("Se Hizo Submit Paid");
   };
 
   return (
@@ -61,7 +84,11 @@ export default function Form(params: Params) {
             {params.data.titulo}
           </div>
           <div className="p-6 mt-8">
-            <form onSubmit={handleSubmit}>
+            <form
+              onSubmit={
+                params.data.type ? handleSubmitFacture : handleSubmitPaid
+              }
+            >
               <div className="flex flex-col mb-4">
                 <input
                   type="text"
@@ -73,6 +100,7 @@ export default function Form(params: Params) {
                   placeholder="Empresa"
                 />
               </div>
+
               <div className="flex flex-col mb-4">
                 <input
                   type="date"
@@ -95,6 +123,25 @@ export default function Form(params: Params) {
                   placeholder="Total a Pagar"
                 />
               </div>
+              {params.data.type ? (
+                <div className="flex flex-col mb-4">
+                  <label className="hidden" htmlFor="estado_factura">
+                    estado
+                  </label>
+                  <select
+                    onChange={HandleSelectChange}
+                    value={formData.estado_factura}
+                    name="estado_factura"
+                    id="estado_factura"
+                    className="rounded-lg border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                  >
+                    <option value={1}>Pagada</option>
+                    <option value={0}>Pendiente</option>
+                  </select>
+                </div>
+              ) : (
+                <></>
+              )}
               <div className="flex flex-col mb-4">
                 <input
                   type="text"
@@ -110,6 +157,15 @@ export default function Form(params: Params) {
                   }
                 />
               </div>
+              {factExists ? (
+                <div className="mb-2 text-red-500 flex">
+                  <ExclamationCircleIcon className="w-5 mr-1" />{" "}
+                  {`${params.data.type ? "La Factura" : "El Pago"} con
+                  este Numero Ya Existe`}
+                </div>
+              ) : (
+                <></>
+              )}
               <div className="flex w-full my-4">
                 <button
                   type="submit"

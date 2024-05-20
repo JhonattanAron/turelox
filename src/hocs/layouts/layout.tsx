@@ -15,9 +15,9 @@ export default function Layout(param: Params) {
       {Session ? (
         <div>
           <NavBar />
-          <div className="sm:flex items-center h-[100vh]">
+          <div className="xl:flex items-center h-[100vh]">
             <LatMenu />
-            <div className="sm:pt-0 pt-[8vh]">{param.children}</div>
+            <div className="xl:pt-0 pt-[8vh]">{param.children}</div>
           </div>
         </div>
       ) : (

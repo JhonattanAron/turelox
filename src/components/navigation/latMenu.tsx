@@ -8,7 +8,7 @@ import {
 
 export default function LatMenu() {
   return (
-    <div className="bg-black shadow-xl h-full sm:flex hidden left-0 bottom-0 ">
+    <div className="bg-black shadow-xl h-full xl:flex hidden left-0 bottom-0 ">
       <ul className="flex flex-col h-full justify-evenly  p-3">
         <li>
           <a
@@ -22,10 +22,10 @@ export default function LatMenu() {
         <li>
           <a
             className="flex py-10 px-5 hover:bg-gray-800 hover:shadow-gray-600 rounded-xl hover:shadow-xl duration-500"
-            href="/home"
+            href="/pedidos"
           >
             <ShoppingBagIcon className="h-6 w-6 text-white" />
-            <h2 className="text-xl mx-3 text-white">Shop</h2>
+            <h2 className="text-xl mx-3 text-white">Pedidos</h2>
           </a>
         </li>
         <li>

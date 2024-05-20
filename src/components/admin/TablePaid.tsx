@@ -1,9 +1,14 @@
-export default function TablePaid() {
+import React from "react";
+interface Props {
+  filter?: string;
+}
+
+const TablePaid: React.FC<Props> = ({ filter = "all" }) => {
   return (
-    <div className="container max-w-3xl px-4 mx-auto sm:px-8 ">
+    <div className="container h-[32vh] overflow-scroll  mx-auto sm:px-8 shadow-2xl ">
       <div className="py-8">
-        <div className="px-4 py-4 -mx-4 overflow-x-auto sm:-mx-8 sm:px-8">
-          <div className="inline-block min-w-full overflow-hidden rounded-lg shadow-2xl">
+        <div className=" py-4 overflow-x-auto">
+          <div className="inline-block min-w-full overflow-hidden rounded-lg ">
             <table className="min-w-full leading-normal ">
               <thead>
                 <tr>
@@ -11,7 +16,7 @@ export default function TablePaid() {
                     scope="col"
                     className="px-5 py-3 text-sm font-normal text-left text-gray-800 uppercase bg-white border-b border-gray-200"
                   >
-                    Id
+                    Comprobante
                   </th>
                   <th
                     scope="col"
@@ -30,13 +35,13 @@ export default function TablePaid() {
                     scope="col"
                     className="px-5 py-3 text-sm font-normal text-left text-gray-800 uppercase bg-white border-b border-gray-200"
                   >
-                    Pagado
+                    Status
                   </th>
                   <th
                     scope="col"
                     className="px-5 py-3 text-sm font-normal text-left text-gray-800 uppercase bg-white border-b border-gray-200"
                   >
-                    Comprobante
+                    Acciones
                   </th>
                 </tr>
               </thead>
@@ -70,7 +75,7 @@ export default function TablePaid() {
                         aria-hidden="true"
                         className="absolute inset-0 bg-green-200 rounded-full opacity-50"
                       ></span>
-                      <span className="relative">Procesado</span>
+                      <span className="relative">Asignado</span>
                     </span>
                   </td>
                   <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
@@ -89,4 +94,6 @@ export default function TablePaid() {
       </div>
     </div>
   );
-}
+};
+
+export default TablePaid;

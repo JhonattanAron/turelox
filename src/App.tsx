@@ -8,6 +8,7 @@ import Register from "./containers/pages/Register";
 import VerfiedMailPage from "./containers/pages/VerifiedMail";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
+import Pedidos from "./containers/pages/Pedidos";
 
 function App() {
   // Mueve la declaración de useLocation dentro del componente App
@@ -19,6 +20,7 @@ function App() {
       <Route path="*" element={<Error404 />} />
       <Route path="/" element={Session ? <Dashboard /> : <Home />} />
       <Route path="/home" element={Session ? <Dashboard /> : <Home />} />
+      <Route path="/pedidos" element={Session ? <Pedidos /> : <Home />} />
       <Route path="/board" element={<Dashboard />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
