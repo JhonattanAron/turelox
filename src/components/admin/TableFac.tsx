@@ -257,9 +257,7 @@ const TableFac: React.FC<Props> = ({ filter = false, date = "" }) => {
                 </tr>
               </thead>
 
-              <tbody className="relative">
-                {filter ? ReturnDataByFilter(date) : ReturnData()}
-              </tbody>
+              <tbody>{filter ? ReturnDataByFilter(date) : ReturnData()}</tbody>
             </table>
           </div>
         </div>

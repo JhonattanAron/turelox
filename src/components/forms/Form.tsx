@@ -1,11 +1,13 @@
 import Cookies from "js-cookie";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ConfirmDataSet } from "../../redux/reducers/ConfirmData";
 import {
   CircleStackIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
+import { AppDispatch, RootState } from "../../store";
+import { fecthFactures } from "../../redux/reducers/GetDataFactures";
 
 interface Params {
   data: {
@@ -26,8 +28,11 @@ export default function Form(params: Params) {
     estado_factura: "0",
     comprobante: "",
   });
+  const Facturas = useSelector(
+    (state: RootState) => state.get_data_factures.factures_data
+  );
   const [factExists, setFactExists] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const HandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -35,6 +40,10 @@ export default function Form(params: Params) {
   const HandleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
+
+  useEffect(() => {
+    dispatch(fecthFactures(id));
+  }, [dispatch, id]);
 
   const handleSubmitFacture = async (
     event: React.FormEvent<HTMLFormElement>
@@ -140,7 +149,28 @@ export default function Form(params: Params) {
                   </select>
                 </div>
               ) : (
-                <></>
+                <div className="flex flex-col mb-4">
+                  <label className="hidden" htmlFor="estado_factura">
+                    Asinar Pago
+                  </label>
+                  <select
+                    onChange={HandleSelectChange}
+                    value={formData.estado_factura}
+                    name="estado_factura"
+                    id="estado_factura"
+                    className="rounded-lg border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                  >
+                    <option value={0}>No Asignar Pago</option>
+                    {Facturas.map((facmap, index) => {
+                      return (
+                        <option key={index} value={facmap.comprobante}>
+                          Factura: {facmap.comprobante} - Empresa:{" "}
+                          {facmap.empresa}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
               )}
               <div className="flex flex-col mb-4">
                 <input

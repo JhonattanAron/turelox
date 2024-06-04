@@ -9,10 +9,11 @@ interface Params {
 }
 
 export default function Layout(param: Params) {
-  const Session = useSelector((state: RootState) => state.session.isLogin);
+  const isLoggedIn = useSelector((state: RootState) => state.session.isLogin);
+
   return (
     <>
-      {Session ? (
+      {isLoggedIn ? (
         <div>
           <NavBar />
           <div className="xl:flex items-center h-[100vh]">

@@ -14,8 +14,8 @@ const initialState:FactureDataState = {
 };
 
 export const fecthFactures = createAsyncThunk(
-  "factures_data",
-  async (id: number) => {
+  "factures/fecthFactures",
+  async (id: string | undefined ) => {
     const response = await fetch(`http://localhost:8085/fatures/${id}`);
     if (!response.ok) {
       throw new Error("Failed to fetch beneficios");
