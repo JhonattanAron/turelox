@@ -4,17 +4,21 @@ import {
   KeyIcon,
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Login } from "../../redux/reducers/Session";
+import { useDispatch, useSelector } from "react-redux";
+import { Login } from "../../redux/Slices/Session";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { AppDispatch, RootState } from "../../store";
+import { LoginUserThunk } from "../../redux/Thunks/UserThunks";
+import User from "../../interfaces/UserModel";
 
 export default function LoginForm() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [incorrectPass, setIncorrectPass] = useState(false);
   const [noRegister, setNoRegister] = useState(false);
-  const [FormData, setFormData] = useState({
+  const [FormData, setFormData] = useState<User>({
+    username: "",
     email: "",
     password: "",
   });
@@ -26,32 +30,13 @@ export default function LoginForm() {
 
   const HandleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(JSON.stringify(FormData));
-    try {
-      const GetLogin = await fetch("http://localhost:8085/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "cors",
-        body: JSON.stringify(FormData),
-      });
-      const json = await GetLogin.json();
-      const value = parseInt(json.response);
-      if (value === 0) {
-        setIncorrectPass(true);
-        return null;
-      } else if (value === 404) {
-        setNoRegister(true);
-      } else {
-        dispatch(Login());
-        Cookies.set("id", json.response);
-        navigate("/home");
-      }
-    } catch (error) {
-      console.log(error);
-      setErrorLogin(true);
+    const response = await dispatch(LoginUserThunk(FormData));
+    if (response.payload.login) {
+      Cookies.set("user", response.payload.user); //Guardar Login
+      dispatch(Login());
     }
+    setIncorrectPass(response.payload === 11001);
+    setNoRegister(response.payload === 11002);
   };
 
   return (

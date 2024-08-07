@@ -9,7 +9,7 @@ interface SessionState {
 
 const initialState: SessionState = {
   isLogin: Cookies.get("isLogin") === "true",
-  isLogout: true,
+  isLogout: false,
   error: null,
 };
 
@@ -19,11 +19,11 @@ const Session = createSlice({
   reducers: {
     Login: (state) => {
       state.isLogin = true;
-      Cookies.set("isLogin", "true", { expires: 7 }); 
+      Cookies.set("isLogin", "true", { expires: 7 });
     },
     Logout: (state) => {
       state.isLogin = false;
-      Cookies.remove("isLogin"); 
+      Cookies.remove("isLogin");
     },
   },
 });

@@ -4,6 +4,11 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store";
+import { createUser } from "../../redux/Thunks/UserThunks";
+import User from "../../interfaces/UserModel";
+import { CircularProgress } from "@mui/material";
 
 export function Comprobacion(
   comprobacionOne: boolean,
@@ -75,13 +80,17 @@ export default function RegisterForm() {
   const [password2, setPassword2] = useState<boolean>(false);
   const [passequuals, setPassEquals] = useState(false);
   const [emailUsed, setEmailUsed] = useState(false);
+  const [errorServidor, setErrorServidor] = useState(false);
+  const [cargandoFecth, setCargandoFecth] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
   const [comprobarPassword, setComprobarPassword] = useState([
     false,
     false,
     false,
     false,
   ]);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<User>({
+    id: "",
     username: "",
     email: "",
     password: password,
@@ -144,40 +153,14 @@ export default function RegisterForm() {
     }
   };
 
-  const HandleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const HandleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (passequuals && comprobarPassword.every(Boolean)) {
-      const { username, email, password } = formData;
-      if (username && email && password) {
-        console.log(JSON.stringify(formData));
-        fetch("http://localhost:8085/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          mode: "cors",
-          body: JSON.stringify(formData),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            const reponseInt = parseInt(data.response);
-            console.log(reponseInt);
-            if (reponseInt === 100) {
-              console.log("Usuario Registrado con exito");
-              setDatosGuardados(true);
-            } else if (reponseInt === 150) {
-              setEmailUsed(true);
-            }
-          })
-          .catch((error) => console.error("Error:", error));
-      } else {
-        console.log("Llena todos los campos antes de enviar el formulario");
-        console.log(formData);
-      }
-    } else {
-      console.log("la password ni coincide ni es segura");
-    }
+    setCargandoFecth(true);
+    const registro = await dispatch(createUser(formData));
+    setCargandoFecth(false);
+    setEmailUsed(registro.payload === 11000);
+    setDatosGuardados(registro.payload === undefined);
+    setErrorServidor(registro.payload.message === "Failed to fetch");
   };
 
   return (
@@ -288,8 +271,21 @@ export default function RegisterForm() {
                 type="submit"
                 className="w-full px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2"
               >
-                <span className="w-full">Register</span>
+                <span className="w-full">
+                  {cargandoFecth ? <CircularProgress size={27} /> : "Register"}
+                </span>
               </button>
+              {errorServidor ? (
+                <div className="mt-2 text-red-500 flex">
+                  <ExclamationCircleIcon className="w-5 mr-1" /> Error con el
+                  Servidor Reporta
+                  <a className="text-blue-500 mx-2 underline" href="/reportar">
+                    Aqui
+                  </a>
+                </div>
+              ) : (
+                <></>
+              )}
             </form>
           )}
           <div className="pt-12 pb-12 text-center">

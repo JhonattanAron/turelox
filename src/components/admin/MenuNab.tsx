@@ -1,5 +1,5 @@
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
-import { Logout } from "../../redux/reducers/Session";
+import { Logout } from "../../redux/Slices/Session";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 

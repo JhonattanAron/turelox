@@ -2,9 +2,9 @@
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TotalFatures } from "../../redux/reducers/DashBoardSlice";
+import { TotalFatures } from "../../redux/Slices/DashBoardSlice";
 import { RootState } from "../../store";
-import { DesconfirmDataSet } from "../../redux/reducers/ConfirmData";
+import { DesconfirmDataSet } from "../../redux/Slices/ConfirmData";
 import ModalComponent from "../utils/ModalComponent";
 import TablePaid from "./TablePaid";
 import FactureInterface from "../../interfaces/FacInterface";
@@ -42,8 +42,7 @@ const TableFac: React.FC<Props> = ({ filter = false, date = "" }) => {
     (state: RootState) => state.confirm_data.confirmdata
   );
   const dispatch = useDispatch();
-  const id = Cookies.get("id");
-  const [fetched, setFetched] = useState(false);
+  const User = Cookies.get("user");
   const [data, setData] = useState<FactureInterface[]>([
     {
       id: "21",
@@ -58,24 +57,6 @@ const TableFac: React.FC<Props> = ({ filter = false, date = "" }) => {
   useEffect(() => {
     SumarTotal();
   }, [data]);
-
-  const getData = async () => {
-    const fetchData = await fetch(`http://localhost:8085/fatures/${id}`);
-    const dataJson = await fetchData.json();
-    if (dataJson.length > 0) {
-      setData(dataJson);
-    }
-    setFetched(true);
-  };
-  if (!fetched) {
-    getData();
-  }
-  useEffect(() => {
-    if (confirmData) {
-      getData();
-      dispatch(DesconfirmDataSet());
-    }
-  }, [confirmData]);
 
   const SumarTotal = () => {
     let total = 0;

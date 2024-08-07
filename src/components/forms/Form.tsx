@@ -1,13 +1,13 @@
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ConfirmDataSet } from "../../redux/reducers/ConfirmData";
+import { ConfirmDataSet } from "../../redux/Slices/ConfirmData";
 import {
   CircleStackIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
 import { AppDispatch, RootState } from "../../store";
-import { fecthFactures } from "../../redux/reducers/GetDataFactures";
+import { fecthFactures } from "../../redux/Slices/GetDataFactures";
 
 interface Params {
   data: {

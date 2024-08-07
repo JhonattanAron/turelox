@@ -1,14 +1,14 @@
-import { combineReducers } from "@reduxjs/toolkit"
-import Session from "./reducers/Session"
-import DashBoardSlice from "./reducers/DashBoardSlice"
-import ConfirmData from "./reducers/ConfirmData"
-import GetDataFactures from "./reducers/GetDataFactures"
+import { combineReducers } from "@reduxjs/toolkit";
+import Session from "./Slices/Session";
+import DashBoardSlice from "./Slices/DashBoardSlice";
+import ConfirmData from "./Slices/ConfirmData";
+import AuthSlice from "./Slices/AuthSlice";
 
 const RootReducer = combineReducers({
-    session: Session,
-    dashboard_data:DashBoardSlice,
-    confirm_data:ConfirmData,
-    get_data_factures:GetDataFactures
-})
+  session: Session,
+  dashboard_data: DashBoardSlice,
+  confirm_data: ConfirmData,
+  auth_controll: AuthSlice,
+});
 
-export default RootReducer
+export default RootReducer;
