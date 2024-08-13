@@ -16,9 +16,13 @@ export default function Layout(param: Params) {
       {isLoggedIn ? (
         <div>
           <NavBar />
-          <div className="xl:flex items-center h-[100vh]">
-            <LatMenu />
-            <div className="xl:pt-0 pt-[8vh]">{param.children}</div>
+          <div className="xl:flex items-center bg-black pt-[8vh] h-[100vh]">
+            <div className="h-full">
+              <LatMenu />
+            </div>
+            <div className="bg-white w-full h-full overflow-y-auto">
+              {param.children}
+            </div>
           </div>
         </div>
       ) : (

@@ -32,6 +32,7 @@ export default function LoginForm() {
     e.preventDefault();
     const response = await dispatch(LoginUserThunk(FormData));
     if (response.payload.login) {
+      Cookies.set("img_perfil", response.payload.imgProfile);
       Cookies.set("user", response.payload.user); //Guardar Login
       dispatch(Login());
     }

@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import MenuNav from "./MenuNab";
 
-export default function ProfileButtonMenu() {
+interface Props {
+  img: string;
+}
+
+export default function ProfileButtonMenu({ img }: Props) {
   const [menuVisible, setMenuVisible] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -37,7 +41,7 @@ export default function ProfileButtonMenu() {
       >
         <img
           alt="profil"
-          src="https://www.w3schools.com/howto/img_avatar.png"
+          src={img}
           className="mx-auto object-cover rounded-full h-10 w-10 "
         />
       </button>

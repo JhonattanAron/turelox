@@ -34,4 +34,30 @@ const LoginUser = async (user: User) => {
   }
 };
 
-export { RegisterUser, LoginUser };
+const GetUserById = async (id: string) => {
+  try {
+    const solicitud = await fetch(`${ApiUrl}/users/${id}`);
+    const data = await solicitud.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+const PutUserById = async (id: string) => {
+  try {
+    const solicitud = await fetch(`${ApiUrl}/users/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+      mode: "cors",
+    });
+    const data = await solicitud.json();
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+export { RegisterUser, LoginUser, GetUserById, PutUserById };

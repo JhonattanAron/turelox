@@ -1,14 +1,12 @@
 import Cookies from "js-cookie";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ConfirmDataSet } from "../../redux/Slices/ConfirmData";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   CircleStackIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
 import { AppDispatch, RootState } from "../../store";
-import { fecthFactures } from "../../redux/Slices/GetDataFactures";
-
+import FactureInterface from "../../interfaces/FacInterface";
 interface Params {
   data: {
     titulo: string;
@@ -28,9 +26,7 @@ export default function Form(params: Params) {
     estado_factura: "0",
     comprobante: "",
   });
-  const Facturas = useSelector(
-    (state: RootState) => state.get_data_factures.factures_data
-  );
+
   const [factExists, setFactExists] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -40,39 +36,25 @@ export default function Form(params: Params) {
   const HandleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
-
-  useEffect(() => {
-    dispatch(fecthFactures(id));
-  }, [dispatch, id]);
+  const [data, setData] = useState<FactureInterface[]>([
+    {
+      id: "21",
+      empresa: "ACME Corporation",
+      fecha: "2024-04-01",
+      total: "100",
+      comprobante: "ABC123",
+      estado_factura: "1",
+      user_id: "1",
+    },
+  ]);
 
   const handleSubmitFacture = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
     console.log(formData);
-    try {
-      const fetchPost = await fetch(`http://localhost:8085/fatures/set/${id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "cors",
-        body: JSON.stringify(formData),
-      });
-      const data = await fetchPost.json();
-      console.log(data.response);
-      if (parseInt(data.response) === 150) {
-        setFactExists(true);
-      } else {
-        setResponse(data.response);
-        setSubmit(true);
-        dispatch(ConfirmDataSet());
-      }
-    } catch (error) {
-      console.log(error);
-      setResponse("Ocurrio un Error con el Servidor");
-    }
   };
+
   const handleSubmitPaid = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("Se Hizo Submit Paid");
@@ -161,7 +143,7 @@ export default function Form(params: Params) {
                     className="rounded-lg border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   >
                     <option value={0}>No Asignar Pago</option>
-                    {Facturas.map((facmap, index) => {
+                    {data.map((facmap, index) => {
                       return (
                         <option key={index} value={facmap.comprobante}>
                           Factura: {facmap.comprobante} - Empresa:{" "}

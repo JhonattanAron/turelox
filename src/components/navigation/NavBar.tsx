@@ -10,8 +10,16 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import ProfileButtonMenu from "../admin/PrfileButton";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function NavBar() {
+  const imgProfile = Cookies.get("img_perfil");
+  const GetImg = (): string => {
+    return imgProfile
+      ? imgProfile
+      : "https://cdn-icons-png.freepik.com/256/1077/1077114.png?semt=ais_hybrid";
+  };
+
   const Session = useSelector((state: RootState) => state.session.isLogin);
   const navigate = useNavigate();
   return (
@@ -87,7 +95,7 @@ export default function NavBar() {
             )}
             <div className="relative flex items-center xl:right-auto">
               {Session ? (
-                <ProfileButtonMenu />
+                <ProfileButtonMenu img={GetImg()} />
               ) : (
                 <div className="flex">
                   <button

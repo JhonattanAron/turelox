@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { LoginUser, RegisterUser } from "../api/AuthApi";
+import { GetUserById, LoginUser, RegisterUser } from "../api/AuthApi";
 import User from "../../interfaces/UserModel";
 
 export const createUser = createAsyncThunk(
@@ -18,6 +18,20 @@ export const LoginUserThunk = createAsyncThunk(
   async (postData: User, { rejectWithValue }) => {
     try {
       return await LoginUser(postData);
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const GetUserByIdThunk = createAsyncThunk(
+  "posts/loginUser",
+  async (getData: string | undefined, { rejectWithValue }) => {
+    if (getData === undefined) {
+      return "id not found";
+    }
+    try {
+      return await GetUserById(getData);
     } catch (error) {
       return rejectWithValue(error);
     }

@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createUser } from "../Thunks/UserThunks";
+import { createUser, GetUserByIdThunk } from "../Thunks/UserThunks";
 import User from "../../interfaces/UserModel";
-import { LoginUser } from "../api/AuthApi";
+import { RootState } from "../../store";
+
 export interface PostState {
   items: User[];
   status: string;
@@ -20,6 +21,7 @@ const AuthSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Casos para createUser
       .addCase(createUser.pending, (state) => {
         state.status = "loading";
       })
@@ -30,9 +32,28 @@ const AuthSlice = createSlice({
       .addCase(createUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Failed to create user";
+      })
+      // Casos para GetUserByIdThunk
+      .addCase(GetUserByIdThunk.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        GetUserByIdThunk.fulfilled,
+        (state, action: PayloadAction<User>) => {
+          state.status = "success";
+          state.items = [action.payload];
+        }
+      )
+      .addCase(GetUserByIdThunk.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Failed to fetch user";
       });
   },
 });
+
+// Selector para obtener el primer usuario
+export const selectUser = (state: RootState): User | undefined =>
+  state.auth_controll.items[0];
 
 // Exportar el reducer
 export default AuthSlice.reducer;
